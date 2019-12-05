@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org"
+      xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
+
+<head>
+    <title>Registration page </title>
+</head>
+<body>
+Edit  user:
+<form th:action="@{/admin/edit}" method="post">
+    <div><label> Id : <input type="hidden" th:value="${user.id}" name="id" th:text="${user.id}" /> </label></div>
+    <div><label> Логин :<input type="text" name="login" th:value="${user.login}"/> </label></div>
+    <div><label> Пароль: <input type="password" name="password" value="hzchtotut"/> </label></div>
+    <div><label> Имя: <input type="text" name="username" th:value="${user.username}"/> </label></div>
+    <div><label> Почта: <input type="text" name="mail" th:value="${user.mail}"/> </label></div>
+    <div><input type="submit" value="Изменить"/></div>
+</form>
+</body>
+</html>
