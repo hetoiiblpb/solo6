@@ -10,7 +10,4 @@ public class MainController {
     public String greeting() {
         return "greeting";
     }
-
-
-
 }

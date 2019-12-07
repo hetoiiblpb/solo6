@@ -8,6 +8,7 @@ import java.util.List;
 
 
 public interface UserService {
+
     @Transactional
     boolean isExistLogin(String login) throws SQLException;
 
