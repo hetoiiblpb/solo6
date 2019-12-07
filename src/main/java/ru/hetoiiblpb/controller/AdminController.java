@@ -9,7 +9,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import ru.hetoiiblpb.model.User;
 import ru.hetoiiblpb.service.UserService;
 
-import java.security.Principal;
 import java.sql.SQLException;
 
 @Controller
@@ -22,9 +21,8 @@ public class AdminController {
 
 
     @GetMapping("/admin/allUsers")
-    public String main(Model model, Principal principal) throws SQLException {
+    public String main(Model model) throws SQLException {
         model.addAttribute("users",userService.getAllUsers());
-        System.out.println(principal);
         return "allUsers";
     }
 
