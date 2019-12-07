@@ -28,13 +28,13 @@
         <!--        <td><span th:text="[Protected]"> password </span></td>-->
         <td><span th:text="${user.username}"> name </span></td>
         <td><span th:text="${user.mail}"> mail </span></td>
-        <td><span th:text="${user.getAuthorities()}"> roles </span></td>
+        <td><span th:text="${user.roles}"> roles </span></td>
         <td>
             <form method="get" th:action="@{/admin/edit/}" >
             <input type="submit" value="изменить"/>
             <input type="hidden" th:name="id" th:value="${user.id}"/></form>
         </td>
-        <td th:if="${user.getRoles().size() < 2}">
+        <td th:if="${!user.getRoles().toString().contains('ADMIN')}">
             <form method="GET" th:action="@{/admin/delete/}">
             <input type="submit" value="Удалить"/>
             <input type="hidden" th:name="id" th:value="${user.id}"/></form>

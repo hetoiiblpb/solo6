@@ -8,6 +8,7 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 
 import javax.sql.DataSource;
 
@@ -23,6 +24,11 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Autowired
     private DataSource dataSource;
 
+    @Bean
+    public AuthenticationSuccessHandler myAuthenticationSuccessHandler() {
+        return new SuccesHandlerImpl();
+    }
+
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http
@@ -35,6 +41,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                     .loginPage("/login")
                     .usernameParameter("login")
                     .passwordParameter("password")
+                .successHandler(myAuthenticationSuccessHandler())
                     .permitAll()
                 .and()
                     .logout()
@@ -49,5 +56,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .passwordEncoder(passwordEncoder())
                 .usersByUsernameQuery("select login,password,is_active from user where login=?")
                 .authoritiesByUsernameQuery("select u.login, r.role from user u inner join role r inner join user_role ur on u.id = ur.user_id and ur.role_id=r.id where u.login=?");
+
     }
 }
