@@ -44,7 +44,19 @@ public class AdminController {
     @PostMapping("/admin/edit")
     private String editUser(@ModelAttribute User user, Model model) throws SQLException {
         userService.updateUser(user);
-        model.addAttribute("users",userService.getAllUsers());
+        model.addAttribute("users", userService.getAllUsers());
+        return "redirect:/admin/allUsers";
+    }
+
+    @PostMapping("/admin/add")
+    public String addUser(User user, Model model) throws SQLException {
+
+
+        if (userService.isExistLogin(user.getLogin())) {
+            model.addAttribute("message", "This login exists!");
+//            return "allUsers";
+        }
+        userService.addUser(user);
         return "redirect:/admin/allUsers";
     }
 

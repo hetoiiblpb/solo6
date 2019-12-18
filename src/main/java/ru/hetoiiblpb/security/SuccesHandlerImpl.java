@@ -1,4 +1,4 @@
-package ru.hetoiiblpb.configure;
+package ru.hetoiiblpb.security;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.core.Authentication;

@@ -44,7 +44,8 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         if (!userRepository.existsByLogin(user.getLogin())) {
             user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
             user.setActive(true);
-            // user.setRoles(Collections.singleton(Role.USER));
+            user.setRoles(Collections.singleton(new Role(2L, "USER")));
+
             userRepository.save(user);
             return true;
         }
