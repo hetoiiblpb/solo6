@@ -5,10 +5,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
-import ru.hetoiiblpb.model.User;
+import ru.hetoiiblpb.model.UserDTO;
 import ru.hetoiiblpb.service.UserService;
-
-import java.sql.SQLException;
 
 @Controller
 public class RegistrationController {
@@ -25,14 +23,14 @@ public class RegistrationController {
     }
 
     @PostMapping("/registration")
-    public String addUser(User user, Model model) throws SQLException {
+    public String addUser(UserDTO userDTO, Model model) {
 
 
-        if (userService.isExistLogin(user.getLogin())) {
-            model.addAttribute("message","This login exists!");
+        if (userService.isExistLogin(userDTO.getLogin())) {
+            model.addAttribute("message", "This login exists!");
             return "registration";
         }
-        userService.addUser(user);
+        userService.addUser(userDTO);
         return "redirect:/login";
     }
 }

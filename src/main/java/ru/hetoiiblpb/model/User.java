@@ -9,6 +9,7 @@ import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
 
+
 @Entity
 public class User implements UserDetails {
     @Id
@@ -25,7 +26,8 @@ public class User implements UserDetails {
 
     private boolean isActive;
 
-    @ManyToMany
+
+    @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(name = "user_role",
             joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"),
             inverseJoinColumns = @JoinColumn(name = "role_id", referencedColumnName = "id"))
@@ -35,7 +37,7 @@ public class User implements UserDetails {
     public User() {
     }
 
-    public User(String username, String password, String login, String mail) {
+    public User(String login, String password, String username, String mail) {
         this.login = login;
         this.password = password;
         this.username = username;

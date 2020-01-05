@@ -19,7 +19,7 @@ public class Role implements GrantedAuthority {
     @Column(name = "role", nullable = false)
     private String role;
 
-    @ManyToMany(mappedBy = "roles")
+    @ManyToMany(mappedBy = "roles", fetch = FetchType.LAZY)
     private Set<User> roles = new HashSet<>();
 
     public Role() {

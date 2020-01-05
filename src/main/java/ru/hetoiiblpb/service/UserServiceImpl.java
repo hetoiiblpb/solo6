@@ -7,21 +7,50 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import ru.hetoiiblpb.model.Role;
 import ru.hetoiiblpb.model.User;
+import ru.hetoiiblpb.model.UserDTO;
+import ru.hetoiiblpb.repository.RoleRepository;
 import ru.hetoiiblpb.repository.UserRepository;
 
-import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 
 @Service
 public class UserServiceImpl implements UserService, UserDetailsService {
     private final UserRepository userRepository;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
+    private final RoleRepository roleRepository;
 
-    public UserServiceImpl(UserRepository userRepository, BCryptPasswordEncoder bCryptPasswordEncoder) {
+    public UserServiceImpl(RoleRepository roleRepository, UserRepository userRepository, BCryptPasswordEncoder bCryptPasswordEncoder) {
+        this.roleRepository = roleRepository;
         this.userRepository = userRepository;
         this.bCryptPasswordEncoder = bCryptPasswordEncoder;
 
+    }
+
+    private User fromDTOtoUser(UserDTO userDTO) {
+        User user = new User(userDTO.getLogin(),
+                userDTO.getPassword(),
+                userDTO.getUsername(),
+                userDTO.getMail());
+        user.setId(userDTO.getId());
+        String[] roles = userDTO.getRoles().split(",");
+        Set<Role> roleSet = new HashSet<>();
+        for (String role : roles) {
+            roleSet.add(roleRepository.findByRole(role));
+        }
+        user.setRoles(roleSet);
+        if (!user.getLogin().isEmpty()) {
+            if (!user.getPassword().isEmpty()) {
+                user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
+            } else {
+                user.setPassword(userRepository.getById(user.getId()).getPassword());
+            }
+            user.setActive(true);
+            return user;
+        }
+        return user;
     }
 
     @Override
@@ -30,22 +59,14 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     }
 
     @Override
-    public boolean notNullDataUser(User user) {
-        return (!user.getLogin().isEmpty() && !user.getPassword().isEmpty());
-    }
-
-    @Override
     public List<User> getAllUsers() {
         return userRepository.findAll();
     }
 
     @Override
-    public boolean addUser(User user) {
+    public boolean addUser(UserDTO userDTO) {
+        User user = fromDTOtoUser(userDTO);
         if (!userRepository.existsByLogin(user.getLogin())) {
-            user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
-            user.setActive(true);
-            user.setRoles(Collections.singleton(new Role(2L, "USER")));
-
             userRepository.save(user);
             return true;
         }
@@ -59,15 +80,9 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     }
 
     @Override
-    public boolean updateUser(User user) {
-        if (notNullDataUser(user)) {
-            user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
-            user.setActive(true);
-            user.setRoles(Collections.singleton(new Role(2L, "USER")));
-            userRepository.save(user);
-            return true;
-        }
-        return false;
+    public boolean updateUser(UserDTO userDTO) {
+        userRepository.save(fromDTOtoUser(userDTO));
+        return true;
     }
 
     @Override
@@ -84,4 +99,5 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     public UserDetails loadUserByUsername(String s) throws UsernameNotFoundException {
         return userRepository.findByUsername(s);
     }
+
 }

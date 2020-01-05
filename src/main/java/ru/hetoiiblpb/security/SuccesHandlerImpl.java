@@ -16,6 +16,7 @@ public class SuccesHandlerImpl implements AuthenticationSuccessHandler {
     public void onAuthenticationSuccess(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, Authentication authentication) throws IOException, ServletException {
         if (authentication.getAuthorities().toString().contains("ADMIN")) {
             httpServletResponse.setStatus(HttpServletResponse.SC_OK);
+            System.out.println(authentication.getAuthorities());
             httpServletResponse.sendRedirect("admin/allUsers");
         } else {
             System.out.println(authentication.getAuthorities());
