@@ -3,7 +3,8 @@ package ru.hetoiiblpb.model;
 import java.util.Objects;
 
 public class UserDTO {
-    private static String login;
+    private String login;
+
     private Long id;
 
 //    private String login;
@@ -16,6 +17,17 @@ public class UserDTO {
 
     private String roles;
 
+    public static UserDTO fromUserToDTO(User user) {
+        UserDTO userDTO = new UserDTO();
+        userDTO.setId(user.getId());
+        userDTO.setLogin(user.getLogin());
+        userDTO.setPassword(user.getPassword());
+        userDTO.setUsername(user.getUsername());
+        userDTO.setMail(user.getMail());
+        userDTO.setRoles(user.getRoles().toString());
+        return userDTO;
+    }
+
     public Long getId() {
         return id;
     }
@@ -24,7 +36,7 @@ public class UserDTO {
         this.id = id;
     }
 
-    public static String getLogin() {
+    public String getLogin() {
         return login;
     }
 

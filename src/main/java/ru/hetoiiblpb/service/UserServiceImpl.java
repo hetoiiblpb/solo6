@@ -11,9 +11,7 @@ import ru.hetoiiblpb.model.UserDTO;
 import ru.hetoiiblpb.repository.RoleRepository;
 import ru.hetoiiblpb.repository.UserRepository;
 
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 
 @Service
@@ -30,26 +28,29 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     }
 
     private User fromDTOtoUser(UserDTO userDTO) {
-        User user = new User(userDTO.getLogin(),
-                userDTO.getPassword(),
-                userDTO.getUsername(),
-                userDTO.getMail());
-        user.setId(userDTO.getId());
-        String[] roles = userDTO.getRoles().split(",");
-        Set<Role> roleSet = new HashSet<>();
-        for (String role : roles) {
-            roleSet.add(roleRepository.findByRole(role));
+        User user = userRepository.getById(userDTO.getId());
+        if (!(user.getLogin().equals(userDTO.getLogin()))) user.setLogin(userDTO.getLogin());
+        if (!(user.getUsername().equals(userDTO.getUsername()))) user.setUsername(userDTO.getUsername());
+        if (!(user.getMail().equals(userDTO.getMail()))) user.setMail(userDTO.getMail());
+        if (!userDTO.getPassword().isEmpty() ^ bCryptPasswordEncoder.matches(userDTO.getPassword(), user.getPassword())) {
+            user.setPassword(bCryptPasswordEncoder.encode(userDTO.getPassword()));
+            System.out.println("Устанавливаем пароль '" + userDTO.getPassword() + "'***********************************");
         }
-        user.setRoles(roleSet);
-        if (!user.getLogin().isEmpty()) {
-            if (!user.getPassword().isEmpty()) {
-                user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
-            } else {
-                user.setPassword(userRepository.getById(user.getId()).getPassword());
+        if (userDTO.getRoles() == null || userDTO.getRoles().isEmpty()) {
+            user.setRoles(Collections.singleton(new Role(2L, "USER")));
+        } else {
+            String[] roles = userDTO.getRoles()
+                    .replaceAll("\\[", "")
+                    .replaceAll("\\]", "")
+                    .split(",");
+            Set<Role> roleSet = new HashSet<>();
+            for (String role : roles) {
+                System.out.println("Находим роль изменяемого юзера - " + role);
+                roleSet.add(roleRepository.findByRole(role));
             }
-            user.setActive(true);
-            return user;
+            user.setRoles(roleSet);
         }
+        System.out.println("Возвращаем такого юзера для update: " + user);
         return user;
     }
 
@@ -64,9 +65,19 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     }
 
     @Override
+    public List<UserDTO> getAllUserDTOs() {
+        List<UserDTO> userDTOList = new ArrayList<>();
+        for (User user : userRepository.findAll()) {
+            userDTOList.add(UserDTO.fromUserToDTO(user));
+        }
+        return userDTOList;
+    }
+
+
+    @Override
     public boolean addUser(UserDTO userDTO) {
         User user = fromDTOtoUser(userDTO);
-        if (!userRepository.existsByLogin(user.getLogin())) {
+        if (!isExistLogin(user.getLogin())) {
             userRepository.save(user);
             return true;
         }
@@ -96,8 +107,8 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     }
 
     @Override
-    public UserDetails loadUserByUsername(String s) throws UsernameNotFoundException {
-        return userRepository.findByUsername(s);
+    public UserDetails loadUserByUsername(String userName) throws UsernameNotFoundException {
+        return userRepository.findByUsername(userName);
     }
 
 }

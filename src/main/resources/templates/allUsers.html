@@ -170,7 +170,7 @@
 
                                 </td>
 
-                                <!--   Кнопка удалить-->
+<!--                                   Кнопка удалить-->
                                 <td th:if="${!user.getRoles().toString().contains('ADMIN')}">
                                     <form method="GET" th:action="@{/admin/delete/}">
                                         <input type="submit" class="btn btn-danger" value="Удалить"/>

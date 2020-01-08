@@ -42,7 +42,6 @@ public class AdminController {
     private String editUser(@ModelAttribute UserDTO userDTO, Model model) {
         System.out.println(userDTO);
         userService.updateUser(userDTO);
-        model.addAttribute("users", userService.getAllUsers());
         return "redirect:/admin/allUsers";
     }
 
@@ -50,7 +49,7 @@ public class AdminController {
     public String addUser(UserDTO userDTO, Model model) {
 
 
-        if (userService.isExistLogin(UserDTO.getLogin())) {
+        if (userService.isExistLogin(userDTO.getLogin())) {
             model.addAttribute("message", "This login exists!");
         }
         userService.addUser(userDTO);

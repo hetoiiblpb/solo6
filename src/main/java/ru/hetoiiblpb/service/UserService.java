@@ -18,6 +18,8 @@ public interface UserService {
     @Transactional
     List<User> getAllUsers();
 
+    List<UserDTO> getAllUserDTOs();
+
     @Transactional
     boolean addUser(UserDTO userDTO);
 
