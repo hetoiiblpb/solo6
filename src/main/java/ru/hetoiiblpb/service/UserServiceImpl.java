@@ -34,8 +34,14 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         if (!(user.getMail().equals(userDTO.getMail()))) user.setMail(userDTO.getMail());
         if (!userDTO.getPassword().isEmpty() ^ bCryptPasswordEncoder.matches(userDTO.getPassword(), user.getPassword())) {
             user.setPassword(bCryptPasswordEncoder.encode(userDTO.getPassword()));
-            System.out.println("Устанавливаем пароль '" + userDTO.getPassword() + "'***********************************");
+            System.out.println("Устанавливаем пароль '" + userDTO.getPassword() + "'   ***********************************");
         }
+        setRolesToUser(userDTO, user);
+        System.out.println("Возвращаем такого юзера для update: " + user);
+        return user;
+    }
+
+    private void setRolesToUser(UserDTO userDTO, User user) {
         if (userDTO.getRoles() == null || userDTO.getRoles().isEmpty()) {
             user.setRoles(Collections.singleton(new Role(2L, "USER")));
         } else {
@@ -50,8 +56,6 @@ public class UserServiceImpl implements UserService, UserDetailsService {
             }
             user.setRoles(roleSet);
         }
-        System.out.println("Возвращаем такого юзера для update: " + user);
-        return user;
     }
 
     @Override
@@ -76,7 +80,9 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 
     @Override
     public boolean addUser(UserDTO userDTO) {
-        User user = fromDTOtoUser(userDTO);
+        User user = new User(userDTO.getLogin(), bCryptPasswordEncoder.encode(userDTO.getPassword()), userDTO.getUsername(), userDTO.getMail());
+        setRolesToUser(userDTO, user);
+        user.setActive(true);
         if (!isExistLogin(user.getLogin())) {
             userRepository.save(user);
             return true;

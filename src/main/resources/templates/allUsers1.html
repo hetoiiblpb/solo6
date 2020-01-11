@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>Bootstrap hetoiiblpb</title>
+
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css"
+          integrity="sha384-HSMxcRTRxnN+Bdg0JdbxYKrThecOKuH5zCYotlSAcp1+c8xmyTe9GYg1l9a69psu" crossorigin="anonymous">
+
+    <!-- Optional theme -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap-theme.min.css"
+          integrity="sha384-6pzBo3FDv/PJ8r2KRkGHifhEocL+1X2rVCTTkUfGk7/0pbek5mMa1upzvWbrUbOZ" crossorigin="anonymous">
+
+    <!-- Latest compiled and minified JavaScript -->
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"
+            integrity="sha384-aJ21OjlMXNL5UyIl/XNwTMqvzeRMZH2w8c5cRVpzpU8Y5bApTppSuUkhZXN0VxHd"
+            crossorigin="anonymous"></script>
+
+    <!-- Custom styles for this template -->
+    <link href="../css/dashboard.css" rel="stylesheet">
+</head>
+
+<body>
+
+<!--HEADER-->
+<nav class="navbar navbar-inverse navbar-fixed-top">
+    <!--<nav class="navbar navbar-inverse navbar-fixed-top">-->
+    <div class="container-fluid">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar"
+                    aria-expanded="false" aria-controls="navbar">
+                <span class="sr-only">Toggle navigation</span>
+            </button>
+            <a class="navbar-brand" href="/">bootstrap hetoiiblpb</a>
+        </div>
+        <div id="navbar" class="navbar-collapse collapse">
+            <ul class="nav navbar-nav navbar-right">
+                <li>
+                    <form th:action="@{/logout}" method="post">
+                        <input type="submit" class="btn btn-danger" value="Выйти"/>
+                    </form>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+
+<!--Side BAR-->
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-sm-3 col-md-2 sidebar">
+            <ul class="nav nav-sidebar">
+                <li sec:authorize="hasAuthority('USER')"><a href="/">Страница пользователя</a></li>
+                <li class="active"><a href="/admin/allUsers">Страница Админа</a></li>
+            </ul>
+        </div>
+        <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
+
+            <!--    NAV TABS        -->
+            <ul class="nav nav-tabs" role="tablist">
+                <li role="presentation" class="active"><a href="#tab1" id="resetTable" role="tab" data-toggle="tab">Таблица
+                    пользователей</a>
+                </li>
+                <li role="presentation"><a href="#tab2" role="tab" data-toggle="tab">Новый пользователь</a></li>
+            </ul>
+
+            <!--   1ST TAB CONTETNT-->
+            <div class="tab-content" id="myTabContent">
+                <div class="tab-pane fade active in" id="tab1" role="tabpanel">
+                    <span id="spisok3"></span>
+                    <h2 id="spisok">Список юзеров</h2>
+                    <div class="table-responsive">
+                        <table class="table table-bordered table-hover" id="tableUser">
+                            <thead>
+                            <tr>
+                                <th> Id</th>
+                                <th> Логин</th>
+                                <th> Имя</th>
+                                <th> Почта</th>
+                                <th> Роли</th>
+                                <th> Действия</th>
+                                <th></th>
+                            </tr>
+                            </thead>
+
+
+                            <!--                            <tbody>-->
+                            <!--                            <tr th:if="${users.empty}">-->
+                            <!--                                <td colspan="7"> Нет доступных пользвателей</td>-->
+                            <!--                            </tr>-->
+                            <!--                            <tr th:each="user : ${users}" items="${requestScope.users}" var="user" varStatus="vs">-->
+                            <!--                                <td><span th:text="${user.id}"> id </span></td>-->
+                            <!--                                <td><span th:text="${user.login}"> login </span></td>-->
+                            <!--                                <td><span th:text="${user.username}"> name </span></td>-->
+                            <!--                                <td><span th:text="${user.mail}"> mail </span></td>-->
+                            <!--                                <td><span th:text="${user.roles}"> roles </span></td>-->
+
+                            <!--                                !!!MODAL!!!-->
+                            <!--                                <td>-->
+                            <!--                                    <button type="button" class="btn btn-primary" id="editUserBtn" data-toggle="modal">-->
+                            <!--&lt;!&ndash;                                            th:attr="data-target='#editUserModal'+${user.id}">&ndash;&gt;-->
+                            <!--                                        Изменить-->
+                            <!--                                    </button>-->
+
+                            <!--                                    <div class="modal fade" tabindex="-1"-->
+                            <!--                                         role="dialog"-->
+                            <!--                                         aria-labelledby="exampleModalLabel" aria-hidden="true">-->
+                            <!--&lt;!&ndash;                                        th:id="editUserModal+${user.id}" &ndash;&gt;-->
+
+                            <!--                                        <div class="modal-dialog" role="document">-->
+                            <!--                                            <div class="modal-content">-->
+                            <!--                                                <div class="modal-header">-->
+                            <!--                                                    <h1 class="modal-title" id="exampleModalLabel">Edit user <b-->
+                            <!--                                                            class="text text-capitalize" >-->
+                            <!--&lt;!&ndash;                                                        th:text="${user.username}"/>&ndash;&gt;-->
+                            <!--                                                    </h1>-->
+                            <!--                                                </div>-->
+                            <!--&lt;!&ndash;                                                <div class="modal-body">&ndash;&gt;-->
+                            <!--&lt;!&ndash;                                                    <form method="post" th:action="@{/admin/edit/}">&ndash;&gt;-->
+                            <!--&lt;!&ndash;                                                        <div class="form-group text-center">&ndash;&gt;-->
+                            <!--&lt;!&ndash;                                                            <label for="updateUserId" class="col-form-label-center">Id:</label>&ndash;&gt;-->
+                            <!--&lt;!&ndash;                                                            <input class="form-control text-center" id="updateUserId" type="text"&ndash;&gt;-->
+                            <!--&lt;!&ndash;                                                                   name="id" th:value="${user.id}" readonly>&ndash;&gt;-->
+                            <!--&lt;!&ndash;                                                            <label for="updateUserLogin" class="col-form-label">Login:</label>&ndash;&gt;-->
+                            <!--&lt;!&ndash;                                                            <input type="text" class="form-control text-center"&ndash;&gt;-->
+                            <!--&lt;!&ndash;                                                                   id="updateUserLogin" name="login"&ndash;&gt;-->
+                            <!--&lt;!&ndash;                                                                   th:attr="value = ${user.login}">&ndash;&gt;-->
+                            <!--&lt;!&ndash;                                                            <label for="updateUserPass"&ndash;&gt;-->
+                            <!--&lt;!&ndash;                                                                   class="col-form-label">Password:</label>&ndash;&gt;-->
+                            <!--&lt;!&ndash;                                                            <input type="password" class="form-control text-center"&ndash;&gt;-->
+                            <!--&lt;!&ndash;                                                                   id="updateUserPass" name="password"&ndash;&gt;-->
+                            <!--&lt;!&ndash;                                                                   placeholder="Old encoded password">&ndash;&gt;-->
+                            <!--&lt;!&ndash;                                                            <label for="updateUserName" class="col-form-label">Name:</label>&ndash;&gt;-->
+                            <!--&lt;!&ndash;                                                            <input type="text" class="form-control text-center"&ndash;&gt;-->
+                            <!--&lt;!&ndash;                                                                   id="updateUserName" name="username"&ndash;&gt;-->
+                            <!--&lt;!&ndash;                                                                   th:attr="value = ${user.username}">&ndash;&gt;-->
+                            <!--&lt;!&ndash;                                                            <label for="updateUserEmail" class="col-form-label">E-Mail:</label>&ndash;&gt;-->
+                            <!--&lt;!&ndash;                                                            <input type="email" class="form-control text-center"&ndash;&gt;-->
+                            <!--&lt;!&ndash;                                                                   id="updateUserEmail" name="mail"&ndash;&gt;-->
+                            <!--&lt;!&ndash;                                                                   th:attr="value = ${user.mail}">&ndash;&gt;-->
+                            <!--&lt;!&ndash;                                                            <small id="emailHelp" class="form-text text-muted">Мы не&ndash;&gt;-->
+                            <!--&lt;!&ndash;                                                                сообщаем вашу почту никому</small>&ndash;&gt;-->
+                            <!--&lt;!&ndash;                                                            &lt;!&ndash;роль&ndash;&gt;&ndash;&gt;-->
+                            <!--&lt;!&ndash;                                                            <p></p>&ndash;&gt;-->
+                            <!--&lt;!&ndash;                                                            <label class="col-form-label-center">Role:</label>&ndash;&gt;-->
+                            <!--&lt;!&ndash;                                                            <input type="checkbox" class="checkbox-inline" id="role1"&ndash;&gt;-->
+                            <!--&lt;!&ndash;                                                                   name="roles" value="ADMIN"/>Админ&ndash;&gt;-->
+                            <!--&lt;!&ndash;                                                            <input type="checkbox" class="checkbox-inline" id="role"&ndash;&gt;-->
+                            <!--&lt;!&ndash;                                                                   name="roles" value="USER" checked="checked"/>Юзер&ndash;&gt;-->
+
+                            <!--&lt;!&ndash;                                                        </div>&ndash;&gt;-->
+
+
+                            <!--&lt;!&ndash;                                                </div>&ndash;&gt;-->
+                            <!--&lt;!&ndash;                                                <div class="modal-footer">&ndash;&gt;-->
+                            <!--&lt;!&ndash;                                                    <button type="button" class="btn btn-secondary"&ndash;&gt;-->
+                            <!--&lt;!&ndash;                                                            data-dismiss="modal">Закрыть&ndash;&gt;-->
+                            <!--&lt;!&ndash;                                                    </button>&ndash;&gt;-->
+                            <!--&lt;!&ndash;                                                    <button type="submit" th:method="post" class="btn btn-primary" id="updateFormUser">&ndash;&gt;-->
+                            <!--&lt;!&ndash;                                                        Изменить&ndash;&gt;-->
+                            <!--&lt;!&ndash;                                                    </button>&ndash;&gt;-->
+                            <!--&lt;!&ndash;                                                </div>&ndash;&gt;-->
+                            <!--&lt;!&ndash;                                                </form>&ndash;&gt;-->
+                            <!--                                            </div>-->
+                            <!--                                        </div>-->
+                            <!--                                    </div>-->
+
+                            <!--                                </td>-->
+
+                            <!--                                   Кнопка удалить-->
+                            <!--                                <td>-->
+                            <!--                                    <form method="DELETE"  id="deleteUser" >-->
+                            <!--                                        th:action="@{/admin/delete/}"  было в форме-->
+                            <!--                                    <button id="deleteUser" class="btn btn-danger" name="id" type="submit" value="удалить!" ></button>-->
+                            <!--                                        <input type="hidden" id="deleteUserId"/>-->
+                            <!--                                    </form>-->
+                            <!--                                    th:name="id" th:value="${user.id}" было в хиддене-->
+                            <!--                                </td>-->
+                            <!--                            </tr>-->
+                            <!--                            </tbody>-->
+                        </table>
+                    </div>
+                </div>
+
+
+                <!--2ND TAB CONTENT-->
+                <div class="tab-pane fade" id="tab2" role="tabpanel">
+                    <div class="tab-content">
+                        <form action="#" th:action="@{/admin/add}" method="post">
+                            <div class="container">
+                                <div class="form-group">
+                                    <label for="addLogin">Логин</label>
+                                    <input type="text" class="form-control" name="login" id="addLogin">
+                                </div>
+                                <div class="form-group">
+                                    <label for="addPassword">Пароль</label>
+                                    <input type="password" class="form-control" name="password" id="addPassword">
+                                </div>
+                                <div class="form-group">
+                                    <label for="addUsername">Имя</label>
+                                    <input type="text" class="form-control" name="username" id="addUsername">
+                                </div>
+                                <div class="form-group">
+                                    <label for="addMail">Почта</label>
+                                    <input type="email" class="form-control" id="addMail" name="mail"
+                                           aria-describedby="emailHelp">
+                                    <small id="emailHelp" class="form-text text-muted">Мы не сообщаем вашу почту
+                                        никому</small>
+                                    <p></p>
+                                    <label class="col-form-label-center">Role:</label>
+                                    <input type="checkbox" class="checkbox-inline" id="addRole1" name="roles"
+                                           value="ADMIN"/>Admin
+                                    <input type="checkbox" class="checkbox-inline" id="addRole2" name="roles"
+                                           value="USER"
+                                           checked="checked"/>User
+                                </div>
+                                <button type="submit" class="btn btn-primary">Добавить</button>
+                                <div th:text="${message}"></div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- Bootstrap core JavaScript
+================================================== -->
+<!-- Placed at the end of the document so the pages load faster -->
+<!--<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>-->
+<!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
+        integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
+        crossorigin="anonymous"></script>
+<script src="https://code.jquery.com/jquery-1.12.4.min.js"
+        integrity="sha384-nvAa0+6Qg9clwYCGGPpDQLVpLNn0fRaROjHqs13t4Ggj3Ez50XnGQqc/r8MhnRDZ"
+        crossorigin="anonymous"></script>
+<!-- Include all compiled plugins (below), or include individual files as needed -->
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"
+        integrity="sha384-aJ21OjlMXNL5UyIl/XNwTMqvzeRMZH2w8c5cRVpzpU8Y5bApTppSuUkhZXN0VxHd"
+        crossorigin="anonymous"></script>
+
+<!--Мои скрипты-->
+<script src="../bootstrap-3.3.7/js/allUsers.js"></script>
+
+</body>
+</html>

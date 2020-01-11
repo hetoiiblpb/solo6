@@ -1,50 +1,40 @@
-<!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
-<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
-    <meta name="description" content="">
-    <meta name="author" content="">
+    <meta name="description" content="admin dashboard">
+    <meta name="author" content="Dart Axis">
+    <title>Hetoiiblpb solo7</title>
+    <link rel="icon" href="../static/img/favicon.ico">
+    <link href="https://fonts.googleapis.com/css?family=IBM+Plex+Sans:300&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.0/css/all.css"
+          integrity="sha384-lZN37f5QGtY3VHgisS14W3ExzMWZxybE1SJSEsQp9S+oqd12jhcu+A56Ebc1zFSJ" crossorigin="anonymous">
+    <!--<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+          integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">-->
 
-    <title>Bootstrap hetoiiblpb</title>
-
-    <!-- Latest compiled and minified CSS -->
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css"
-          integrity="sha384-HSMxcRTRxnN+Bdg0JdbxYKrThecOKuH5zCYotlSAcp1+c8xmyTe9GYg1l9a69psu" crossorigin="anonymous">
-
-    <!-- Optional theme -->
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap-theme.min.css"
-          integrity="sha384-6pzBo3FDv/PJ8r2KRkGHifhEocL+1X2rVCTTkUfGk7/0pbek5mMa1upzvWbrUbOZ" crossorigin="anonymous">
-
-    <!-- Latest compiled and minified JavaScript -->
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"
-            integrity="sha384-aJ21OjlMXNL5UyIl/XNwTMqvzeRMZH2w8c5cRVpzpU8Y5bApTppSuUkhZXN0VxHd"
-            crossorigin="anonymous"></script>
-
-    <!-- Custom styles for this template -->
-    <link href="../css/dashboard.css" rel="stylesheet">
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
 </head>
 
-<body>
+<body class="bg-light">
 
-<!--HEADER-->
-<nav class="navbar navbar-inverse navbar-fixed-top">
+<!--<nav class="navbar navbar-inverse bg-dark navbar-fixed-top">-->
+<nav class="navbar navbar-expand-md bg-dark navbar-dark">
     <div class="container-fluid">
         <div class="navbar-header">
-            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar"
-                    aria-expanded="false" aria-controls="navbar">
-                <span class="sr-only">Toggle navigation</span>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#collapsibleNavbar">
+                <span class="navbar-toggler-icon"></span>
             </button>
-            <a class="navbar-brand" href="/">bootstrap hetoiiblpb</a>
+
+            <a class="navbar-brand" href="/">Spring Boot + Bootstrap+Ajax+jQuery</a>
         </div>
         <div id="navbar" class="navbar-collapse collapse">
             <ul class="nav navbar-nav navbar-right">
                 <li>
-                    <form th:action="@{/logout}" method="post">
-                        <input type="submit" class="btn btn-danger" value="Выйти"/>
+                    <form action="/logout" method="post">
+                        <button type="submit" class="btn btn-danger">Logout</button>
                     </form>
                 </li>
             </ul>
@@ -52,40 +42,41 @@
     </div>
 </nav>
 
-
-<!--Side BAR-->
 <div class="container-fluid">
     <div class="row">
         <div class="col-sm-3 col-md-2 sidebar">
-            <ul class="nav nav-sidebar">
-                <li sec:authorize="hasAuthority('USER')" class="active"><a href="/">Страница пользователя</a></li>
-                <li sec:authorize="hasAuthority('ADMIN')"><a href="/admin/allUsers">Страница Админа</a></li>
-
+            <ul class="nav nav-pills flex-column">
+                <br>
+                <li class="nav-item"><a href="/admin/allUsers" class="nav-link">Администратор <span class="sr-only">(current)</span></a>
+                </li>
+                <li class="nav-item"><a href="/" class="nav-link">Юзер <span class="sr-only active">(current)</span></a>
+                </li>
             </ul>
         </div>
         <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
-            <h1 th:inline="text">Hello <span sec:authentication="Principal.username"></span>! </h1>
+
+            <h1 class="col-md-3" th:inline="text">Hello <span sec:authentication="Principal.username"></span>! </h1>
+
         </div>
     </div>
 </div>
+</div>
+</div>
 
-            <!-- Bootstrap core JavaScript
-            ================================================== -->
-            <!-- Placed at the end of the document so the pages load faster -->
-            <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
-            <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
-            <script src="https://code.jquery.com/jquery-1.12.4.min.js"
-                    integrity="sha384-nvAa0+6Qg9clwYCGGPpDQLVpLNn0fRaROjHqs13t4Ggj3Ez50XnGQqc/r8MhnRDZ"
-                    crossorigin="anonymous"></script>
-            <!-- Include all compiled plugins (below), or include individual files as needed -->
-            <script src="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"
-                    integrity="sha384-aJ21OjlMXNL5UyIl/XNwTMqvzeRMZH2w8c5cRVpzpU8Y5bApTppSuUkhZXN0VxHd"
-                    crossorigin="anonymous"></script>
-            <script src="../js/bootstrap.min.js"></script>
-            <script src="../js/bootstrap.js"></script>
-            <script src="../js/bootstrap-modalmanager.js"></script>
-            <script src="../js/bootstrap-modal.js"></script>
+<script src="https://code.jquery.com/jquery-3.3.1.min.js"
+        integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous">
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
+        integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
+        crossorigin="anonymous"></script>
+<!--<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+        integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+        crossorigin="anonymous"></script>-->
+
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"
+        integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
+        crossorigin="anonymous"></script>
+
+<script src="../bootstrap-3.3.7/js/allUsers.js"></script>
 </body>
 </html>
-
-<!--<h1 th:inline="text">Hello [[${#httpServletRequest.remoteUser}]]!</h1>-->

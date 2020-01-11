@@ -29,6 +29,13 @@ public class RestController {
         return new ResponseEntity<>(UserDTO.fromUserToDTO(userService.getUserById(id)), HttpStatus.OK);
     }
 
+    @PostMapping
+    public ResponseEntity<UserDTO> addUser(@RequestBody UserDTO userDTO) {
+        System.out.println("полученный юзер " + userDTO);
+        userService.addUser(userDTO);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
     @DeleteMapping("{id}")
     public ResponseEntity deleteUserById(@PathVariable(value = "id") Long id) {
         userService.deleteUser(id);
